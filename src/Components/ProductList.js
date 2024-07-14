@@ -17,42 +17,21 @@ function ProductList({ selectedProductsList, setSelectedProductsList }) {
   const [variantDiscountButtons, setVariantDiscountButtons] = useState([]);
 
   useEffect(() => {
-    setDiscountButtons((prev) => {
-      if (selectedProductsList.length === 1 && selectedProductsList[0] === null)
-        return [true];
-      if (selectedProductsList.length > prev.length) {
-        const newButtons = [...prev];
-        for (let i = prev.length; i < selectedProductsList.length; i++) {
-          newButtons[i] = true;
-        }
-        return newButtons;
-      }
-      return prev;
+    setDiscountButtons(() => {
+      const newButtons = new Array(selectedProductsList.length).fill(true);
+      return newButtons;
     });
 
-    setShowVariants((prev) => {
-      if (selectedProductsList.length > prev.length) {
-        const newVariants = [...prev];
-        for (let i = prev.length; i < selectedProductsList.length; i++) {
-          newVariants[i] = true;
-        }
-        return newVariants;
-      }
-      return prev;
+    setShowVariants(() => {
+      const Variants = new Array(selectedProductsList.length).fill(true);
+      return Variants;
     });
 
-    setVariantDiscountButtons((prev) => {
-      if (selectedProductsList.length > prev.length) {
-        const newButtons = [...prev];
-        for (let i = prev.length; i < selectedProductsList.length; i++) {
-          const product = selectedProductsList[i];
-          newButtons[i] = product
-            ? new Array(product.variants.length).fill(true)
-            : [];
-        }
-        return newButtons;
-      }
-      return prev;
+    setVariantDiscountButtons(() => {
+      const newButtons = selectedProductsList.map((product) =>
+        product ? new Array(product.variants.length).fill(false) : []
+      );
+      return newButtons;
     });
   }, [selectedProductsList]);
 
