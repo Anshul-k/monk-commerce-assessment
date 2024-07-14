@@ -8,9 +8,9 @@ import ProductPicker from "./ProductPicker";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function ProductList({ selectedProductsList, setSelectedProductsList }) {
-  const [discountButtons, setDiscountButtons] = useState(
-    new Array(selectedProductsList.length).fill(true)
-  );
+  const [discountButtons, setDiscountButtons] = useState([
+    new Array(selectedProductsList.length).fill(true),
+  ]);
   const [showProductPicker, setShowProductPicker] = useState(false);
   const [showVariants, setShowVariants] = useState([]);
   const [pickerIndex, setPickerIndex] = useState();
@@ -141,7 +141,16 @@ function ProductList({ selectedProductsList, setSelectedProductsList }) {
 
   const removeProduct = (index) => {
     const updatedProducts = selectedProductsList.filter((_, i) => i !== index);
+    const updatedDiscountButtons = discountButtons.filter(
+      (_, i) => i !== index
+    );
+    const updatedVariantDiscountButtons = variantDiscountButtons.filter(
+      (_, i) => i !== index
+    );
+
     setSelectedProductsList(updatedProducts);
+    setDiscountButtons(updatedDiscountButtons);
+    setVariantDiscountButtons(updatedVariantDiscountButtons);
   };
 
   const removeVariant = (productIndex, variantIndex) => {
@@ -150,7 +159,14 @@ function ProductList({ selectedProductsList, setSelectedProductsList }) {
       (_, i) => i !== variantIndex
     );
     updatedProducts[productIndex].variants = updatedVariants;
+
+    const updatedVariantDiscountButtons = [...variantDiscountButtons];
+    updatedVariantDiscountButtons[productIndex] = updatedVariantDiscountButtons[
+      productIndex
+    ].filter((_, i) => i !== variantIndex);
+
     setSelectedProductsList(updatedProducts);
+    setVariantDiscountButtons(updatedVariantDiscountButtons);
   };
 
   const VariantPlaceHolder = ({
@@ -175,7 +191,7 @@ function ProductList({ selectedProductsList, setSelectedProductsList }) {
                 <DragIndicatorIcon className="text-gray-500" />
               </div>
               <div className="bg-white shadow-md rounded-3xl overflow-hidden h-11 w-80 flex items-center p-4 justify-between">
-                <p className="text-gray-700">{variantObj.title}</p>
+                <p className="bg-white text-gray-700">{variantObj.title}</p>
               </div>
               {variantDiscountButtons[productIndex][variantIndex] ? (
                 <div className="flex gap-3">
@@ -230,7 +246,7 @@ function ProductList({ selectedProductsList, setSelectedProductsList }) {
               <div>{index + 1}.</div>
               <div className="bg-white shadow-md rounded-lg overflow-hidden h-11 w-80 flex items-center p-4 justify-between">
                 <p
-                  className={`${
+                  className={` bg-white ${
                     productObj === null ? "text-gray-500" : "text-gray-900"
                   }`}
                 >
@@ -241,7 +257,7 @@ function ProductList({ selectedProductsList, setSelectedProductsList }) {
                     setShowProductPicker(true);
                     setPickerIndex(index);
                   }}
-                  className={`cursor-pointer ${
+                  className={`bg-white cursor-pointer ${
                     !productObj
                       ? "text-green-700 h-full hover:text-green-500"
                       : "text-gray-400 hover:text-gray-300"
@@ -275,7 +291,9 @@ function ProductList({ selectedProductsList, setSelectedProductsList }) {
               {ifClose && (
                 <CloseIcon
                   className="text-gray-500 cursor-pointer"
-                  onClick={() => removeProduct(index)}
+                  onClick={() => {
+                    removeProduct(index);
+                  }}
                 />
               )}
             </div>
