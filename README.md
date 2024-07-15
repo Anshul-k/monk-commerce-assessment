@@ -1,6 +1,7 @@
 # Product Management Application
 
 This application allows users to manage a list of products and their variants, providing functionalities such as adding products, adding discounts, reordering products, and selecting variants.
+LIVE DEMO: https://monk-commerece-task-assesment.netlify.app/
 
 ## Features
 
