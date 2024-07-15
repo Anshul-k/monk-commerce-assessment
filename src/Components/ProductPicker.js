@@ -169,7 +169,7 @@ export default function ProductPicker({
         headers: { "x-api-key": "72njgfa948d9aS7gs5" },
       };
       const response = await axios.get(
-        `https://stageapi.monkcommerce.app/task/products/search?search=Hat&page=${page}&limit=1`,
+        `https://stageapi.monkcommerce.app/task/products/search?search=Hat&page=${page}&limit=10`,
         options
       );
       setProductList((prevList) => [...prevList, ...response.data]);
