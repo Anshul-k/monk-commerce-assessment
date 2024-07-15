@@ -1,71 +1,78 @@
-# Getting Started with Create React App
+# Product Management Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This application allows users to manage a list of products and their variants, providing functionalities such as adding products, adding discounts, reordering products, and selecting variants.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Product List Management:**
+  - Display a list of products with options to add, remove, and reorder them.
+  - Each product can have multiple variants, which can also be managed individually.
 
-### `npm start`
+- **Drag and Drop Functionality:**
+  - Use `react-beautiful-dnd` for easy reordering of products and variants within the list.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Product Picker:**
+  - Modal component (`ProductPicker`) for selecting products from a predefined list fetched via API.
+  - Allows filtering products by name and supports scroll-based pagination.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Discount Management:**
+  - Add discounts to products and variants with options for percentage and flat discounts.
 
-### `npm test`
+## Components
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. App.js
 
-### `npm run build`
+- Main entry point for the application.
+- Renders `ProductList` and `AddProductButton` components.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 2. ProductList.js
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Manages the display and management of products and their variants.
+- Uses `DragDropContext`, `Droppable`, and `Draggable` from `react-beautiful-dnd` for drag-and-drop functionality.
+- Allows adding discounts to products and variants.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 3. AddProductButton.js
 
-### `npm run eject`
+- Provides a button to add new products to the `selectedProductsList`.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 4. ProductPicker.js
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Modal component for selecting products from the API.
+- Allows filtering products by name and supports scroll-based pagination for loading more products.
+- Provides checkboxes for selecting products and their variants.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Installation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Clone the repository:
 
-## Learn More
+   ```bash
+   git clone https://github.com/Anshul-k
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Navigate into the project directory:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```bash
+   cd monk-commerce-assessment
 
-### Code Splitting
+3. Install dependencies:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+   ```bash
+   npm install
 
-### Analyzing the Bundle Size
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. Start the development server:
 
-### Making a Progressive Web App
+   ```bash
+   npm start
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+2. Open your browser and visit http://localhost:3000 to view the application.
 
-### Advanced Configuration
+## Technologies Used
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  - React.js
+  - Tailwind CSS
+  - react-beautiful-dnd for drag-and-drop functionality
 
-### Deployment
+## Credits
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# monk-commerce-assessment
+This project was developed by Anshul Kasana.
