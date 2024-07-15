@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,7 +7,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import Divider from "@mui/material/Divider";
 import SearchIcon from "@mui/icons-material/Search";
-import mockdata from "../mockdata";
+import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
 
 // Debouncing function
 const debounce = (func, delay) => {
@@ -147,11 +148,62 @@ export default function ProductPicker({
   selectedProductsList,
   setSelectedProductsList,
 }) {
-  const productList = mockdata;
-  const [filteredProductList, setFilteredProductList] = useState(productList);
+  const [isLoading, setIsLoading] = useState(true);
+  const [productList, setProductList] = useState([]);
+  const [filteredProductList, setFilteredProductList] = useState([]);
   const [checkBoxItems, setCheckBoxItems] = useState({});
   const [searchText, setSearchText] = useState("");
   const [productCount, setProductCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const listRef = useRef(null);
+
+  //* API call
+
+  useEffect(() => {
+    fetchData(page);
+  }, [page]);
+
+  const fetchData = async (page) => {
+    try {
+      const options = {
+        headers: { "x-api-key": "72njgfa948d9aS7gs5" },
+      };
+      const response = await axios.get(
+        `/task/products/search?search=Hat&page=${page}&limit=10`,
+        options
+      );
+      setProductList((prevList) => [...prevList, ...response.data]);
+      setFilteredProductList((prevList) => [...prevList, ...response.data]);
+      setIsLoading(false);
+    } catch (err) {
+      console.log("Error while fetching the Data", err);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        listRef.current &&
+        listRef.current.scrollTop + listRef.current.clientHeight >=
+          listRef.current.scrollHeight - 80
+      ) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    let currentListRef = listRef.current;
+    if (!isLoading && currentListRef) {
+      currentListRef.addEventListener("scroll", handleScroll);
+    }
+    return () => {
+      if (!isLoading && currentListRef) {
+        currentListRef.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [isLoading]);
+
+  //* API call
 
   const handleClose = () => {
     onClose();
@@ -212,13 +264,20 @@ export default function ProductPicker({
   );
 
   const AddProduct = () => {
-    if (checkBoxItems) {
-      const selectedProducts = getSelectedProducts(checkBoxItems, productList);
-      const updatedSelectedProductsList = [...selectedProductsList];
-      updatedSelectedProductsList.splice(pickerIndex, 1);
-      updatedSelectedProductsList.splice(pickerIndex, 0, ...selectedProducts);
-      setSelectedProductsList([...updatedSelectedProductsList]);
+    if (!checkBoxItems || Object.keys(checkBoxItems).length === 0) {
+      return;
     }
+    const allUnchecked = Object.values(checkBoxItems).every(
+      (item) => !item.isChecked
+    );
+    if (allUnchecked) {
+      return;
+    }
+    const selectedProducts = getSelectedProducts(checkBoxItems, productList);
+    const updatedSelectedProductsList = [...selectedProductsList];
+    updatedSelectedProductsList.splice(pickerIndex, 1);
+    updatedSelectedProductsList.splice(pickerIndex, 0, ...selectedProducts);
+    setSelectedProductsList([...updatedSelectedProductsList]);
     handleClose();
   };
 
@@ -266,8 +325,16 @@ export default function ProductPicker({
           </div>
         </div>
         <Divider />
-        <div id="Products List" className="overflow-y-scroll max-h-96">
-          {filteredProductList.length === 0 ? (
+        <div
+          id="Products List"
+          className="overflow-y-scroll max-h-96"
+          ref={listRef}
+        >
+          {isLoading ? (
+            <div className="flex h-full w-full p-4 justify-center items-center">
+              <CircularProgress />
+            </div>
+          ) : filteredProductList.length === 0 ? (
             <DialogContentText className="h-full w-full p-4 justify-between">
               No Records Available
             </DialogContentText>

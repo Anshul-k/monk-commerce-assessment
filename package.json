@@ -44,5 +44,7 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.4"
-  }
+  },
+  "proxy": "http://stageapi.monkcommerce.app"
+
 }
